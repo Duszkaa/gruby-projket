@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
 </head>
-<body>
+<body onload="startTime()">
 
     <table id ="listaZadan">
         <tr>
@@ -49,8 +49,39 @@
     </div>
     <div id="zegar">
 
+        <script>
+            function startTime() {
+                const data1 = new Date();
+                let godz = data1.getHours();
+                let min = data1.getMinutes();
+                let sec = data1.getSeconds();
+                min = checkTime(min);
+                sec = checkTime(sec);
+                let zegar = document.getElementById('zegar');
+                zegar.innerHTML = '<p>' + godz + ':' + min + ':' + sec + '</p>';
+                setTimeout(startTime, 1000);
+            }
+
+            function checkTime(i) {
+                if (i < 10) 
+                    i = '0' + i
+                return i;
+            }
+        </script>
+
     </div>
     <div id="kalendarz">
+        <p id="paragraf">pizza</p>
+
+        <script>
+            const data2 = new Date();
+            let miesiacInt = data2.getMonth();
+            let rokInt = data2.getMonth();
+            function daysInMonth(rok, miesiacInt) {
+                return new Date(rokInt, miesiacInt + 1, 0).getDate();
+            }
+            // for(let i = 0; i <= dniMiesiaca)
+        </script>
 
     </div>
 </body>
