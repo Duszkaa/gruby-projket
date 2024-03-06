@@ -15,7 +15,7 @@
             <th>data</th>
             <th>godzina</th>
             <th>miejscowosc</th>
-            <th>Jana Kilinskiego</th>
+            <th>adres</th>
             <th>priorytet</th>
         </tr>
         <tr>
@@ -24,7 +24,7 @@
             <th>03-06-2024</th>
             <th>13:00</th>
             <th>Zamosc</th>
-            <th>adres</th>
+            <th>Jana Kilinskiego</th>
             <th>wysoki</th>
         </tr>
     </table>
@@ -49,9 +49,9 @@
     
             <label for="fPriorytet">priorytet:</label><br>
             <select name="fPriorytet" id="fPriorytet">
-                <option value="low">low</option>
-                <option value="high">high</option>
-                <option value="medium" selected="selected">medium</option>
+                <option value="low">niski</option>
+                <option value="high">wysoki</option>
+                <option value="medium" selected="selected">sredni</option>
             </select><br><br>
             <button type="submit">wyslij</button>
         </form>
@@ -86,10 +86,24 @@
             const data2 = new Date();
             let miesiacInt = data2.getMonth();
             let rokInt = data2.getMonth();
-            function daysInMonth(rok, miesiacInt) {
+            function daysInMonth(rokInt, miesiacInt) {
                 return new Date(rokInt, miesiacInt + 1, 0).getDate();
             }
-            // for(let i = 0; i <= dniMiesiaca)
+            let kalendarz = document.getElementById('kalendarz');
+            let tbl = document.createElement('table');
+            let daysCount = daysInMonth(rokInt, miesiacInt);
+            let row = tbl.insertRow();
+
+            for(let i = 1; i <= daysCount; i++){
+                let cell = row.insertCell();
+                cell.appendChild(document.createTextNode(i));
+
+                if (i % 7 === 0) {
+                    row = tbl.insertRow();
+                }
+            }
+
+            kalendarz.appendChild(tbl);
         </script>
 
     </div>
