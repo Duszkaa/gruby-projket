@@ -3,25 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
 </head>
 <body>
-    
+
     <table id ="listaZadan">
         <tr>
             <th>lp.</th>
             <th>czynnosc</th>
             <th>data</th>
             <th>godzina</th>
-            <th>miejsce</th>
+            <th>miejscowosc</th>
+            <th>adres</th>
             <th>priorytet</th>
         </tr>
     </table>
     <p>tablica rozwijana z wypisanymi elementami z bazy danych</p>
 
     <div id="formularz">
+        <form id="form" method="POST">
+            <label for="fCzynnosc">Czynność:</label><br>
+            <input type="text" name="fCzynnosc" id="fCzynnosc"><br>
+    
+            <label for="fData">nazwisko:</label><br>
+            <input type="date" name="fData" id="fData"><br>
+    
+            <label for="fGodzina">godzina:</label><br>
+            <input type="time" name="fGodzina" id="fGodzina"><br>
 
+            <label for="fMiejscowosc">miejscowosc:</label><br>
+            <input type="text" name="fMiejscowosc" id="fMiejscowosc"><br>
+
+            <label for="fAdres">adres:</label><br>
+            <input type="text" name="fAdres" id="fAdres"><br>
+    
+            <label for="fPriorytet">priorytet:</label><br>
+            <select name="fPriorytet" id="fPriorytet">
+                <option value="low">low</option>
+                <option value="high">high</option>
+                <option value="medium" selected="selected">medium</option>
+            </select><br><br>
+            <button type="submit">wyslij</button>
+        </form>
     </div>
     <div id="zegar">
 
