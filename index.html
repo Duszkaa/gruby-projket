@@ -14,78 +14,134 @@
     </style>
 </head>
 <body onload="startTime()">
-
-    <table id ="listaZadan">
-        <tr>
-            <th>lp.</th>
-            <th>czynnosc</th>
-            <th>data</th>
-            <th>godzina</th>
-            <th>miejscowosc</th>
-            <th>adres</th>
-            <th>priorytet</th>
-        </tr>
-    </table>
-    <p>tablica rozwijana z wypisanymi elementami z bazy danych</p>
-
-    <div id="formularz">
-        <form id="form" method="POST">
-            <label for="fCzynnosc">Czynność:</label><br>
-            <input type="text" name="fCzynnosc" id="fCzynnosc"><br>
-    
-            <label for="fData">nazwisko:</label><br>
-            <input type="date" name="fData" id="fData"><br>
-    
-            <label for="fGodzina">godzina:</label><br>
-            <input type="time" name="fGodzina" id="fGodzina"><br>
-
-            <label for="fMiejscowosc">miejscowosc:</label><br>
-            <input type="text" name="fMiejscowosc" id="fMiejscowosc"><br>
-
-            <label for="fAdres">adres:</label><br>
-            <input type="text" name="fAdres" id="fAdres"><br>
-    
-            <label for="fPriorytet">priorytet:</label><br>
-            <select name="fPriorytet" id="fPriorytet">
-                <option value="low">low</option>
-                <option value="high">high</option>
-                <option value="medium" selected="selected">medium</option>
-            </select><br><br>
-            <button type="submit">wyslij</button>
-        </form>
+<div class="container">
+    <div class="col-2"></div>
+    <div class="col-7">
+        <br><button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#chuj">Lista Zadań</button>
+        <div class="overflow-scroll collapse" id="chuj" style="max-height: 200px;">
+            <table id ="listaZadan" class="table table-hover table-striped">
+            <thead class="table-light header">
+                    <tr>
+                    <th>czynnosc</th>
+                    <th>data</th>
+                    <th>godzina</th>
+                    <th>priorytet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+                <tr>
+                    <td>czynnosc</td>
+                    <td>data</td>
+                    <td>godzina</td>
+                    <td>priorytet</td>
+                </tr>
+            </tbody>
+            </table>
+        </div><br><br>
+        <div id="formularz" class="form-inline align-content-center">
+            <form id="form" method="POST" >
+                <div class="form-floating">
+                    <input type="text" name="fCzynnosc" id="fCzynnosc" class="form-control" placeholder="czynnosc"><br>
+                    <label for="fCzynnosc" class="form-label" for="fCzynnosc">Czynność</label>
+                </div>
+                <div class="form-floating mb-2">
+                    <textarea id="fOpis" class="form-control" placeholder="opis" style="height: 200px; resize: none;"></textarea><br>
+                    <label for="fOpis" class="form-label">Opisz czynność</label>
+                </div>
+                <div class="row">
+                    <div class="col input-group">
+                        <span class="input-group-text col">Priorytet</span>
+                        <select name="fPriorytet" id="fPriorytet" class="custom-select form-control">
+                            <option value="low">low</option>
+                            <option value="high">high</option>
+                            <option value="medium" selected="selected">medium</option>
+                        </select>
+                    </div>
+                    <div class="col input-group">
+                        <span class="input-group-text">Dzień</span>
+                        <input type="date" name="fData" id="fData" class="form-control custom-date">
+                    </div>
+                    <div class="col input-group w-20">
+                        <span class="input-group-text">Godzina</span>
+                        <input type="time" name="fGodzina" id="fGodzina" class="form-control flex-fill">
+                    </div>
+                </div><br>
+                <button class="btn btn-secondary" type="submit">wyslij</button>
+            </form>
+        </div>
     </div>
-    <div id="zegar">
+    <div class="col-3">
+        <span id="zegar"></span>
+        <div id="kalendarz">
 
         <script>
-            function startTime() {
-                const data1 = new Date();
-                let godz = data1.getHours();
-                let min = data1.getMinutes();
-                let sec = data1.getSeconds();
-                min = checkTime(min);
-                sec = checkTime(sec);
-                let zegar = document.getElementById('zegar');
-                zegar.innerHTML = '<p>' + godz + ':' + min + ':' + sec + '</p>';
-                setTimeout(startTime, 1000);
+            const data2 = new Date();
+            let miesiacInt = data2.getMonth();
+            let rokInt = data2.getMonth();
+            function daysInMonth(rok, miesiacInt) {
+                return new Date(rokInt, miesiacInt + 1, 0).getDate();
             }
-
-            function checkTime(i) {
-                if (i < 10) 
-                    i = '0' + i
-                return i;
-            }
-        </script>
-
-    </div>
-    <div id="kalendarz">
-        <p id="paragraf">pizza</p>
-
-        <script>
-            const date = new Date();
-            const daysOfWeek = ['Niedziela', 'Poniedziłek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
-            const currentDayOfWeek = daysOfWeek[date. getDay()]; 
-            const currentTime = date;
-            kalendarz.innerHTML = currentDayOfWeek;
+            // for(let i = 0; i <= dniMiesiaca)
         </script>
 
         </div>
