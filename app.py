@@ -15,10 +15,10 @@ cursor.execute('''create table if not exists TODO (
                     data date not null default(date()),
                     godzina time
                     )''')
-# cursor.execute("insert into transakcje (waluta,kwota,user) values (?,?,?)", ('zl','300','Marcin'))
-
+exit()
 connection.commit()
 connection.close()
+
 
 def get_db():
     if not hasattr(g,'database'):
@@ -34,7 +34,26 @@ def close_db(error):
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    db = get_db()
+    sql_command = "select * from TODO;"
+    cursor = db.execute(sql_command)
+    TODO = cursor.fetchall()
+    if request.method == "GET":
+        return render_template("index.html", TODO = TODO)
+    else:
+        fCzynnosc = request.form['fCzynnosc']
+        fOpis = request.form['fOpis']
+        fPriorytet = request.form['fPriorytet']
+        fData = request.form['fData']
+        fGodzina  = request.form['fGodzina']
+        if fCzynnosc != "" and fOpis != "" and fPriorytet != "" and fData != "" and fGodzina != "":
+            db = get_db()
+            sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
+            db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
+            db.commit()
+            return render_template("index.html",)
+        else:
+            return render_template("index.html",)
 
 if __name__ == "__name__":
     app.run(debug=True)
