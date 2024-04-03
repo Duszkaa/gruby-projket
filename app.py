@@ -15,7 +15,8 @@ cursor.execute('''create table if not exists TODO (
                     data date not null default(date()),
                     godzina time
                     )''')
-exit()
+
+
 connection.commit()
 connection.close()
 
@@ -51,9 +52,9 @@ def index():
             sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
             db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
             db.commit()
-            return render_template("index.html",)
+            return redirect(url_for("index", TODO = TODO))
         else:
-            return render_template("index.html",)
+            return redirect(url_for("index", TODO = TODO))
 
 if __name__ == "__name__":
     app.run(debug=True)

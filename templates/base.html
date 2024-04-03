@@ -18,16 +18,22 @@
     <div class="col-2"></div>
     <div class="col-7">
         <br><button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#chuj">Lista Zadań</button>
+
         <div class="overflow-scroll collapse" id="chuj" style="max-height: 200px;">
+            
             {% block content %}
             {% endblock %}
+
         </div><br><br>
+
+
+
         <div id="formularz" class="form-inline align-content-center">
             <form id="form" method="POST" >
 
                 <div class="form-floating">
                     <input type="text" name="fCzynnosc" id="fCzynnosc" class="form-control" placeholder="czynnosc"><br>
-                    <label for="fCzynnosc" class="form-label" for="fCzynnosc">Czynność</label>
+                    <label class="form-label" for="fCzynnosc">Czynność</label>
                 </div>
 
                 <div class="form-floating mb-2">
@@ -60,6 +66,9 @@
                 <button class="btn btn-secondary" type="submit">wyslij</button>
             </form>
         </div>
+
+
+
     </div>
     <div class="col-3">
         <span id="zegar"></span>
