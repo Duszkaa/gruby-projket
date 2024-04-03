@@ -4,6 +4,8 @@
 
 {% block content %}
 
+<div class="overflow-scroll collapse" id="chuj" style="max-height: 200px;">
+
 <table id ="listaZadan" class="table table-hover table-striped">
 
     <thead class="table-light header">
@@ -32,4 +34,45 @@
 
     </table>
 
+</div><br><br>
+
+<div id="formularz" class="form-inline align-content-center">
+    <form id="form" method="POST" >
+
+        <div class="form-floating">
+            <input type="text" name="fCzynnosc" id="fCzynnosc" class="form-control" placeholder="czynnosc"><br>
+            <label class="form-label" for="fCzynnosc">Czynność</label>
+        </div>
+
+        <div class="form-floating mb-2">
+            <textarea  name="fOpis" id="fOpis" class="form-control" placeholder="opis" style="height: 200px; resize: none;"></textarea><br>
+            <label for="fOpis" class="form-label">Opisz czynność</label>
+        </div>
+
+        <div class="row">
+
+            <div class="col input-group">
+                <span class="input-group-text col">Priorytet</span>
+                <select name="fPriorytet" id="fPriorytet" class="custom-select form-control">
+                    <option value="low">low</option>
+                    <option value="high">high</option>
+                    <option value="medium" selected="selected">medium</option>
+                </select>
+            </div>
+
+            <div class="col input-group">
+                <span class="input-group-text">Dzień</span>
+                <input type="date" name="fData" id="fData" class="form-control custom-date">
+            </div>
+
+            <div class="col input-group w-20">
+                <span class="input-group-text">Godzina</span>
+                <input type="time" name="fGodzina" id="fGodzina" class="form-control flex-fill">
+            </div>
+
+        </div><br>
+        <button class="btn btn-secondary" type="submit">wyslij</button>
+    </form>
+</div>
+    
 {% endblock %}

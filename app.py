@@ -33,7 +33,7 @@ def close_db(error):
     if hasattr(g,'database'):
         g.sqlite_db.close()
 
-@app.route('/')
+@app.route('/', methods = ["GET", "POST"])
 def index():
     db = get_db()
     sql_command = "select * from TODO;"
@@ -47,14 +47,15 @@ def index():
         fPriorytet = request.form['fPriorytet']
         fData = request.form['fData']
         fGodzina  = request.form['fGodzina']
-        if fCzynnosc != "" and fOpis != "" and fPriorytet != "" and fData != "" and fGodzina != "":
+
+        if fCzynnosc != "" and fOpis != "" and fData != "" and fGodzina != "":
             db = get_db()
             sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
             db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
             db.commit()
-            return redirect(url_for("index", TODO = TODO))
+            return render_template("index.html", TODO = TODO)
         else:
-            return redirect(url_for("index", TODO = TODO))
+            return render_template("index.html", TODO = TODO)
 
 if __name__ == "__name__":
     app.run(debug=True)
