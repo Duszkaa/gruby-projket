@@ -39,6 +39,7 @@ def index():
     sql_command = "select * from TODO;"
     cursor = db.execute(sql_command)
     TODO = cursor.fetchall()
+
     if request.method == "GET":
         return render_template("index.html", TODO = TODO)
     else:
@@ -53,9 +54,9 @@ def index():
             sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
             db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
             db.commit()
-            return render_template("index.html", TODO = TODO)
+            return redirect(url_for('index'))
         else:
-            return render_template("index.html", TODO = TODO)
+            return redirect(url_for('index'))
 
 if __name__ == "__name__":
     app.run(debug=True)
