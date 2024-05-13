@@ -1,5 +1,10 @@
-from flask import Flask, render_template, url_for, request, g, redirect
+from flask import Flask, render_template, url_for, request, g, redirect, jsonify
+
+
+from marshmallow import Schema,fields
 import sqlite3
+from database import TodoSchema, todo_schema, get_db, close_db
+
 
 app = Flask(__name__)
 
@@ -14,24 +19,50 @@ cursor.execute('''create table if not exists TODO (
                     godzina time
                     )''')
 
-
 connection.commit()
 connection.close()
 
+@app.route('/api/czynnosci', methods = ["GET", "POST"])
+def get_czynnosci():
+    db = get_db()
+    if request.method == "GET":
+        sql_command = "select * from TODO"
+        cursor = db.execute(sql_command)
+        czynnosci = cursor.fetchall()
+        todo_schema = TodoSchema(many=True)
 
-def get_db():
-    if not hasattr(g,'database'):
-        conn = sqlite3.connect("database.db")
-        conn.row_factory = sqlite3.Row
-        g.sqlite_db = conn
-    return g.sqlite_db
+        return jsonify({
+            "success": True,
+            "dane": todo_schema.dump(czynnosci)
+        })
+    elif request.method == "POST":
+        dane = request.json
+        # if "priorytet" not in data:
+        #      return  jsonify({
+        #          "succes": False,
+        #          "eror": "Please prvide all required information"
+        #      }),440
+        # else:
+        sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
+        db.execute(sql_command, [dane["czynnosc"], dane["opis_czynnosci"], dane["priorytet"], dane["data"], dane["godzina"]])
+        db.commit()
+        return jsonify({
+            "success": True,
+            "info": "Transaction add successfuly"
+        }),201
 
+@app.route('/api/czynnosci/<int:id>', methods = ["GET"])
+def get_transaction_id(id):
+    db = get_db()
+    if request.method == "GET":
+        sql_command = "select * from TODO where id = ?"
+        cursor = db.execute(sql_command, [id])
+        czynnosci = cursor.fetchone()
 
-@app.teardown_appcontext
-def close_db(error):
-    if hasattr(g,'database'):
-        g.sqlite_db.close()
-
+        return jsonify({
+            "success": True,
+            "data": todo_schema.dump(czynnosci)
+        }),200
 
 @app.route('/', methods = ["GET", "POST"])
 def index():
