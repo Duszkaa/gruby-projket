@@ -1,0 +1,114 @@
+{%extends 'base.html' %}
+
+{% block title %} Strona glowna {% endblock %}
+
+{% block content %}
+
+    <table id ="listaZadan" class="table table-bordered">
+        <thead class="table-light header">
+            <tr>
+                <th>id</th>
+                <th>czynność</th>
+                <th>data</th>
+                <th>opis czynnosci</th>
+                <th>priorytet</th>
+                <th>godzina</th>
+                <th>funkcje</th>
+            </tr>
+        </thead>
+
+        <tbody id="TODOList">
+            
+        </tbody>
+    </table> 
+
+
+
+<script>
+    TODOList = document.getElementById("TODOList");
+    const api_url = "{{url_for('get_czynnosci')}}";
+    let workDataArrTemp = [];
+    async function apiGetTODO() {
+    const response = await fetch(api_url);
+    const data = await response.json();
+    const workData = data.dane;
+    function sortByData(a, b){
+        tempA = Math.floor(new Date(a.data).getTime() / 1000);
+        tempB = Math.floor(new Date(b.data).getTime() / 1000);
+        return tempA - tempB;
+    }
+
+    function fetchData(){
+        console.log(workData.sort(sortByData));
+        workData.forEach(elem =>{
+            console.log(elem);
+            let TODOtbodyTr = document.createElement("tr")
+            TODOList.appendChild(TODOtbodyTr);
+
+            let TODOtbodyTd8 = document.createElement("td")
+            let TODOtbodyTd8Text = document.createTextNode(elem.id);
+            TODOtbodyTd8.appendChild(TODOtbodyTd8Text);
+            TODOtbodyTr.appendChild(TODOtbodyTd8);
+
+            let TODOtbodyTd1 = document.createElement("td")
+            let TODOtbodyTd1Text = document.createTextNode(elem.czynnosc);
+            TODOtbodyTd1.appendChild(TODOtbodyTd1Text);
+            TODOtbodyTr.appendChild(TODOtbodyTd1);
+
+            let TODOtbodyTd2 = document.createElement("td")
+            let TODOtbodyTd2Text = document.createTextNode(elem.data);
+            TODOtbodyTd2.appendChild(TODOtbodyTd2Text);
+            TODOtbodyTr.appendChild(TODOtbodyTd2);
+
+            let TODOtbodyTd3 = document.createElement("td")
+            let TODOtbodyTd3Text = document.createTextNode(elem.opis_czynnosci);
+            TODOtbodyTd3.appendChild(TODOtbodyTd3Text);
+            TODOtbodyTr.appendChild(TODOtbodyTd3);
+
+            let TODOtbodyTd4 = document.createElement("td")
+            let TODOtbodyTd4Text = document.createTextNode(elem.priorytet);
+            TODOtbodyTd4.appendChild(TODOtbodyTd4Text);
+            TODOtbodyTr.appendChild(TODOtbodyTd4);
+
+            let TODOtbodyTd5 = document.createElement("td")
+            let TODOtbodyTd5Text = document.createTextNode(elem.godzina);
+            TODOtbodyTd5.appendChild(TODOtbodyTd5Text);
+            TODOtbodyTr.appendChild(TODOtbodyTd5);
+
+            
+            let TODOtbodyTd6 = document.createElement("td")
+
+            let TODOtbodyTd6A = document.createElement("a");
+            // let temp =  parseInt(elem.id);
+            TODOtbodyTd6A.setAttribute("href", "update/"+elem.id+"")
+            TODOtbodyTd6A.setAttribute("type", "button")
+            TODOtbodyTd6A.setAttribute("class", "btn btn-secondary")
+            let TODOtbodyTd6Text = document.createTextNode("Z");
+            TODOtbodyTd6A.appendChild(TODOtbodyTd6Text);
+            TODOtbodyTd6.appendChild(TODOtbodyTd6A);
+
+            TODOtbodyTr.appendChild(TODOtbodyTd6);
+
+            let TODOtbodyTd7A = document.createElement("a");
+            TODOtbodyTd7A.setAttribute("href", "/delete/"+elem.id)
+            TODOtbodyTd7A.setAttribute("type", "button")
+            TODOtbodyTd7A.setAttribute("class", "btn btn-danger")
+
+            let TODOtbodyTd7Text = document.createTextNode("X");
+            TODOtbodyTd7A.appendChild(TODOtbodyTd7Text);
+            TODOtbodyTd6.appendChild(TODOtbodyTd7A);
+
+            TODOtbodyTr.appendChild(TODOtbodyTd6);
+            
+            // TODOElem.innerHTML =elem.czynnosc +" "+ elem.data +" "+ elem.opis_czynnosci +" "+ elem.priorytet +" "+ elem.godzina;
+        });
+    }
+
+    fetchData();
+
+}
+window.onload = () => {
+    apiGetTODO();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+table, tr, th{
+ border: 1px solid black;
+ width: 400px;
+}
+
+body{
+    margin: 0;
+}
+
+footer {
+    display: block;
+    unicode-bidi: isolate;
+}
