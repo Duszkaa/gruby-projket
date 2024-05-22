@@ -1,0 +1,14 @@
+{%extends 'base.html' %}
+
+{% block title %} Strona glowna {% endblock %}
+
+{% block content %}
+
+<ul>
+    <li>Link do calego api</li>
+    <a href="{{url_for('get_czynnosci')}}">link</a>
+    <li>Link do calego api z wyszukiwaniem przez 'id'</li>
+    <a href="{{url_for('get_czynnosci')}}/0">link</a>
+</ul>
+
+{% endblock %}

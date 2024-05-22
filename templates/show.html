@@ -1,0 +1,61 @@
+{%extends 'base.html' %}
+
+{% block title %} Strona glowna {% endblock %}
+
+{% block content %}
+
+<!--<div class="overflow-scroll" id="collTable" style="max-height: 250px;">
+            <table id ="listaZadan" class="table table-hover table-striped">
+            <thead class="table-light header">
+        <tr>
+            <th>id</th>
+            <th>czynność</th>
+            <th>opis czynnosci</th>
+            <th>priorytet</th>
+            <th>data</th>
+            <th>godzina</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {%for czynnosc in TODO %}
+            <tr>
+                <td>{{czynnosc.id}}</td>
+                <td>{{czynnosc.czynnosc}}</td>
+                <td>{{czynnosc.opis_czynnosci}}</td>
+                <td>{{czynnosc.priorytet}}</td>
+                <td>{{czynnosc.data}}</td>
+                <td>{{czynnosc.godzina}}</td>
+            </tr>
+        {%endfor%}
+    </tbody>
+
+    </table> -->
+    <div id="TODOList"></div>
+<!-- </div> -->
+<script>
+    TODOList = document.getElementById("TODOList");
+    const api_url = "{{url_for('get_czynnosci')}}";
+    let workDataArrTemp = [];
+    async function apiGetTODO() {
+    const response = await fetch(api_url);
+    const data = await response.json();
+    const workData = data.dane;
+    function sortByData(a, b){
+        tempA = Math.floor(new Date(a.data).getTime() / 1000);
+        tempB = Math.floor(new Date(b.data).getTime() / 1000);
+        return tempA - tempB;
+    }
+    console.log(workData.sort(sortByData));
+    workData.forEach(elem =>{
+        console.log(elem);
+        let TODOElem = document.createElement("div");
+        TODOList.appendChild(TODOElem);
+        TODOElem.innerHTML =elem.czynnosc +" "+ elem.data;
+    });
+}
+window.onload = () => {
+    apiGetTODO();
+}
+</script>
+{% endblock %}

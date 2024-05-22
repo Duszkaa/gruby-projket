@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html class="h-100" lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,41 +17,38 @@
         }
     </style>
 </head>
-<body onload="startTime()">
-    <nav class="navbar navbar-expand-lg bg-body-teritiary navbar-light justify-content-center" style="background-color: #6d757d;">
-        <a class="navbar-brand ms-3" href="#" style="color:white;">TODO List</a>
+<body class="d-flex flex-column h-100"">
+    <nav class="navbar navbar-expand navbar-light" style="background-color: #6d757d;">
+        <div class="container-fluid justify-content-center">
+        <a class="navbar-brand ms-2" href="{{url_for('index')}}" style="color:white;">TODO List</a>
         <ul class="navbar-nav">
-            <li class="nav-item ms-3"><a href="#" class="nav-link nav-bar-button">Dodaj</a></li>
-            <li class="nav-item ms-3"><a href="#" class="nav-link nav-bar-button">Wyświetl</a></li>
-            <li class="nav-item ms-3"><a href="#" class="nav-link nav-bar-button">API</a></li>
+            <li class="nav-item ms-2"><a href="{{url_for('add')}}" class="nav-link nav-bar-button">Dodaj</a></li>
+            <li class="nav-item ms-2"><a href="{{url_for('wyswietl')}}" class="nav-link nav-bar-button">Wyświetl</a></li>
+            <li class="nav-item ms-2"><a href="{{url_for('api')}}" class="nav-link nav-bar-button">API</a></li>
           </ul>
+        </div>
     </nav>
-<div class="container">
-    <div class="position-absolute top-25 start-50 translate-middle" >
+<main class="flex-shrink-0">
+    <div class="container">
+    <div class="mt-4 mx-auto col-6" >
 
         {% block content %}
         {% endblock %}
 
 
     </div>
-    <!-- <div class="col-3">
-        <span id="zegar"></span>
-        <div id="kalendarz">
-
-        <script>
-            const data2 = new Date();
-            let miesiacInt = data2.getMonth();
-            let rokInt = data2.getMonth();
-            function daysInMonth(rok, miesiacInt) {
-                return new Date(rokInt, miesiacInt + 1, 0).getDate();
-            }
-            // for(let i = 0; i <= dniMiesiaca)
-        </script>
-
-        </div>
-    </div> -->
 </div>
-<script>
+</main>
+
+<footer class="footer mt-auto py-3" style="background-color: #6d757d;">
+    <div class="container">
+        <div class="text-center p-2">
+            <b style="color:#ffffff;">Strona wykonana przez Dawida Zakrzewskiego i Kacpra Tymickiego</b>
+        </div>
+    </div>
+</footer>
+
+<!-- <script>
     function startTime() {
         const data1 = new Date();
         let godz = data1.getHours();
@@ -68,7 +65,7 @@
             i = '0' + i
         return i;
     }
-</script>
+</script> -->
 <script src="{{url_for('static', filename='style/js/bootstrap.min.js')}}"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@ todo_schema = TodoSchema()
 
 def get_db():
     if not hasattr(g,'database'):
-        conn = sqlite3.connect("database.db")
+        conn = sqlite3.connect("./database.db")
         conn.row_factory = sqlite3.Row
         g.sqlite_db = conn
     return g.sqlite_db
