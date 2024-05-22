@@ -136,6 +136,30 @@ def add():
         else:
             return redirect(url_for('add'))
 
+@app.route('/update', methods = ["GET", "POST"])
+def update():
+    db = get_db()
+    sql_command = "select * from TODO;"
+    cursor = db.execute(sql_command)
+    TODO = cursor.fetchall()
+
+    if request.method == "GET":
+        return render_template("update.html", TODO = TODO)
+    else:
+        fCzynnosc = request.form['fCzynnosc']
+        fOpis = request.form['fOpis']
+        fPriorytet = request.form['fPriorytet']
+        fData = request.form['fData']
+        fGodzina  = request.form['fGodzina']
+
+        if fCzynnosc != "" and fOpis != "" and fData != "" and fGodzina != "":
+            db = get_db()
+            sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
+            db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
+            db.commit()
+            return redirect(url_for('update'))
+        else:
+            return redirect(url_for('update'))
 
 
 # strona wyswietl
