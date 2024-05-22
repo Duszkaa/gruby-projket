@@ -1,5 +1,3 @@
-from datetime import date
-
 from flask import Flask, render_template, url_for, request, g, redirect
 import sqlite3
 
@@ -15,10 +13,11 @@ cursor.execute('''create table if not exists TODO (
                     data date not null default(date()),
                     godzina time
                     )''')
-# cursor.execute("insert into transakcje (waluta,kwota,user) values (?,?,?)", ('zl','300','Marcin'))
+
 
 connection.commit()
 connection.close()
+
 
 def get_db():
     if not hasattr(g,'database'):
@@ -27,14 +26,38 @@ def get_db():
         g.sqlite_db = conn
     return g.sqlite_db
 
+
 @app.teardown_appcontext
 def close_db(error):
     if hasattr(g,'database'):
         g.sqlite_db.close()
 
-@app.route('/')
+
+@app.route('/', methods = ["GET", "POST"])
 def index():
-    return render_template("index.html")
+    db = get_db()
+    sql_command = "select * from TODO;"
+    cursor = db.execute(sql_command)
+    TODO = cursor.fetchall()
+
+    if request.method == "GET":
+        return render_template("index.html", TODO = TODO)
+    else:
+        fCzynnosc = request.form['fCzynnosc']
+        fOpis = request.form['fOpis']
+        fPriorytet = request.form['fPriorytet']
+        fData = request.form['fData']
+        fGodzina  = request.form['fGodzina']
+
+        if fCzynnosc != "" and fOpis != "" and fData != "" and fGodzina != "":
+            db = get_db()
+            sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
+            db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
+            db.commit()
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('index'))
+
 
 if __name__ == "__name__":
     app.run(debug=True)
