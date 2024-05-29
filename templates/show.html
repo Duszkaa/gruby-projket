@@ -7,6 +7,7 @@
     <table id ="listaZadan" class="table table-bordered">
         <thead class="table-light header">
             <tr>
+                <th>id</th>
                 <th>czynność</th>
                 <th>data</th>
                 <th>opis czynnosci</th>
@@ -44,6 +45,11 @@
             let TODOtbodyTr = document.createElement("tr")
             TODOList.appendChild(TODOtbodyTr);
 
+            let TODOtbodyTd8 = document.createElement("td")
+            let TODOtbodyTd8Text = document.createTextNode(elem.id);
+            TODOtbodyTd8.appendChild(TODOtbodyTd8Text);
+            TODOtbodyTr.appendChild(TODOtbodyTd8);
+
             let TODOtbodyTd1 = document.createElement("td")
             let TODOtbodyTd1Text = document.createTextNode(elem.czynnosc);
             TODOtbodyTd1.appendChild(TODOtbodyTd1Text);
@@ -73,27 +79,27 @@
             let TODOtbodyTd6 = document.createElement("td")
 
             let TODOtbodyTd6A = document.createElement("a");
-            TODOtbodyTd6A.setAttribute("href", "{{ url_for('update', id ="+ elem.id+")}}")
+            // let temp =  parseInt(elem.id);
+            TODOtbodyTd6A.setAttribute("href", "update/"+elem.id+"")
             TODOtbodyTd6A.setAttribute("type", "button")
-            TODOtbodyTd6A.setAttribute("class", "btn btn-success")
-            let TODOtbodyTd6Text = document.createTextNode("D");
+            TODOtbodyTd6A.setAttribute("class", "btn btn-secondary")
+            let TODOtbodyTd6Text = document.createTextNode("Z");
             TODOtbodyTd6A.appendChild(TODOtbodyTd6Text);
             TODOtbodyTd6.appendChild(TODOtbodyTd6A);
 
             TODOtbodyTr.appendChild(TODOtbodyTd6);
 
             let TODOtbodyTd7A = document.createElement("a");
-            TODOtbodyTd7A.setAttribute("href", "/")
+            TODOtbodyTd7A.setAttribute("href", "/delete/"+elem.id)
             TODOtbodyTd7A.setAttribute("type", "button")
             TODOtbodyTd7A.setAttribute("class", "btn btn-danger")
+
             let TODOtbodyTd7Text = document.createTextNode("X");
             TODOtbodyTd7A.appendChild(TODOtbodyTd7Text);
             TODOtbodyTd6.appendChild(TODOtbodyTd7A);
 
             TODOtbodyTr.appendChild(TODOtbodyTd6);
             
-
-
             // TODOElem.innerHTML =elem.czynnosc +" "+ elem.data +" "+ elem.opis_czynnosci +" "+ elem.priorytet +" "+ elem.godzina;
         });
     }

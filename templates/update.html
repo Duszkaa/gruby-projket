@@ -1,6 +1,6 @@
 {%extends 'base.html' %}
 
-{% block title %} Strona glowna {% endblock %}
+{% block title %} Update {% endblock %}
 
 {% block content %}
 
@@ -8,12 +8,12 @@
     <form id="form" method="POST" >
 
         <div class="form-floating">
-            <input type="text" name="fCzynnosc" id="fCzynnosc" class="form-control" placeholder="czynnosc"><br>
+            <input type="text" name="fCzynnosc" id="fCzynnosc" class="form-control" placeholder="czynnosc" value="{{TODO.czynnosc}}"><br>
             <label class="form-label" for="fCzynnosc">Czynność</label>
         </div>
 
         <div class="form-floating mb-2">
-            <textarea  name="fOpis" id="fOpis" class="form-control" placeholder="opis" style="height: 200px; resize: none;"></textarea><br>
+            <textarea  name="fOpis" id="fOpis" class="form-control" placeholder="opis" style="height: 200px; resize: none;">{{TODO.opis_czynnosci}}</textarea><br>
             <label for="fOpis" class="form-label">Opisz czynność</label>
         </div>
 
@@ -21,7 +21,7 @@
 
             <div class="col input-group">
                 <span class="input-group-text col">Priorytet</span>
-                <select name="fPriorytet" id="fPriorytet" class="custom-select form-control">
+                <select name="fPriorytet" id="fPriorytet" class="custom-select form-control" value="{{TODO.priorytet}}">
                     <option value="low">low</option>
                     <option value="high">high</option>
                     <option value="medium" selected="selected">medium</option>
@@ -30,12 +30,12 @@
 
             <div class="col input-group">
                 <span class="input-group-text">Dzień</span>
-                <input type="date" name="fData" id="fData" class="form-control custom-date">
+                <input type="date" name="fData" id="fData" class="form-control custom-date" value="{{TODO.data}}">
             </div>
 
             <div class="col input-group w-20">
                 <span class="input-group-text">Godzina</span>
-                <input type="time" name="fGodzina" id="fGodzina" class="form-control flex-fill">
+                <input type="time" name="fGodzina" id="fGodzina" class="form-control flex-fill" value="{{TODO.godzina}}">
             </div>
 
         </div><br>
