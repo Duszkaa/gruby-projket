@@ -6,9 +6,84 @@
 
 <ul>
     <li>Link do calego api</li>
-    <a href="{{url_for('get_czynnosci')}}">link</a>
+    <a href="{{url_for('get_czynnosci')}}" id="link1">link</a>
+    <ul>
+        <li>Metoda GET - zwraca całą listę zadań zapisanych w bazie danych TODO.</li>
+        Bazowa metoda, która zwraca dane z bazy danych przy przejściu na strone API.<br><br>
+
+        Do wywołania metody wystarczy przejść na stornę przez link <br>
+        lub przy użyciu aplikacji służącej do zarządania endpointami<br>
+        takiej jak: Postman i przesłać żądanie GET.<br><br>
+
+        <li>Metoda POST - pozwala dodać do bazy danych zadanie.</li>
+        Do przesłania danych przez API potrzebna jest aplikacja taka<br>
+        jak wyżej wymieniony Postman i przesłać żądanie POST <br>
+        z odpowiednimi argumentami. Przykład żądania: <br> <br>
+        <pre>
+    {
+        "czynnosc": "Przykładowa czynnosc",
+        "data": "2022-01-01",
+        "godzina": "21:22:00",
+        "opis_czynnosci": "Opis co trzeba zrobić w danej czynnosci",
+        "priorytet": "medium"
+    }
+        </pre>
+
+        Po prawidłowym przesłaniu żądania otrzymamy komunikat:<br>
+        <pre>
+    {
+        "info": "Dane dodane poprawnie",
+        "success": true
+    }
+        </pre>
+
+    </ul>
     <li>Link do calego api z wyszukiwaniem przez 'id'</li>
-    <a href="{{url_for('get_czynnosci')}}/0">link</a>
+    <a href="{{url_for('get_czynnosci')}}/0" id="link2">link</a>
+    <ul>
+        <li>Metoda GET - zwraca dany element o podanym ID.</li>
+        Bazowa metoda, która zwraca dane z bazy danych przy przejściu na strone API.<br><br>
+
+        Działa tak samo jak w poprzednim przydatku z wyjątkiem, że w linku <br>
+        strony musimy podać poprawną liczbę "ID" żeby wyszukać odpowiedni<br>
+        element w API. Przykład linku:<br><br>
+
+        http://6187az.pythonanywhere.com/api/czynnosci/"tu wstaw odpowiednią liczbe"<br><br>
+
+        <li>Metoda PUT - aktualizuje dane zapisane w danym elemencie o danym ID.</li>
+        Do zmiany danych przez API potrzebna jest aplikacja taka<br>
+        jak Postman i przesłać żądanie PUT z odpowiednimi argumentami<br>
+        pod link jak w przykładzie z metodą GET. Przykład żądania: <br> <br>
+        <pre>
+    {
+        "czynnosc": "Przykładowa czynnosc",
+        "data": "2022-01-01",
+        "godzina": "21:22:00",
+        "opis_czynnosci": "Opis co trzeba zrobić w danej czynnosci",
+        "priorytet": "medium"
+    }
+        </pre>
+
+        Po prawidłowej zmianie danych otrzymamy komunikat:<br>
+        <pre>
+    {
+        "info": "Dane zmienione",
+        "success": true
+    }
+        </pre>
+
+        <li>Metoda DELETE - usuwa element o podanym ID.</li>
+        Do usunięcia danych przez API potrzebna jest aplikacja taka<br>
+        jak Postman i przesłać żądanie DELETE z odpowiednimi argumentami.<br>
+        pod link jak w przykładzie z metodą GET. Przykład żądania: <br> <br>
+
+        Po usunięciu danych otrzymamy komunikat:<br>
+        <pre>
+    {
+        "info": "Dane usuniete",
+        "success": true
+    }
+    </ul>
 </ul>
 
 {% endblock %}

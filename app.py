@@ -1,35 +1,36 @@
+from datetime import datetime
 from flask import Flask, render_template, url_for, request, g, redirect, jsonify
 from marshmallow import Schema,fields
 import sqlite3
 from database import TodoSchema, todo_schema, get_db, close_db
+import mysql.connector
 
 
 app = Flask(__name__)
 
-connection = sqlite3.connect('database.db')
-cursor = connection.cursor()
-cursor.execute('''create table if not exists TODO (
-                    id integer primary key autoincrement,
-                    czynnosc varchar(60),
-                    opis_czynnosci varchar(255),
-                    priorytet varchar2(30),
-                    data date not null default(date()),
-                    godzina time
-                    )''')
+try:
+    mydb = mysql.connector.connect(host="6187AZ.mysql.pythonanywhere-services.com", user="6187AZ", password="haslo123", database="6187AZ$default")
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT *FROM TODO")
+    myresult = mycursor.fetchall()
+    for x in myresult:
+        print(x)
+    print("dziala")
+except:
+    print("nie dziala")
+    mydb = None
 
-connection.commit()
-connection.close()
+
 
 
 # caly JSON
 @app.route('/api/czynnosci', methods = ["GET", "POST"])
 def get_czynnosci():
-    db = get_db()
-
+    dbcursor = mydb.cursor(dictionary=True)
     if request.method == "GET":
         sql_command = "select * from TODO"
-        cursor = db.execute(sql_command)
-        czynnosci = cursor.fetchall()
+        dbcursor.execute(sql_command)
+        czynnosci = dbcursor.fetchall()
         todo_schema = TodoSchema(many=True)
 
         return jsonify({
@@ -39,29 +40,49 @@ def get_czynnosci():
 
     elif request.method == "POST":
         dane = request.json
-        if "priorytet" not in dane:
+        if "priorytet" or "czynnosc" or "opis_czynnosci" or "godzina" or "data" not in dane:
              return  jsonify({
                  "succes": False,
                  "eror": "Please prvide all required information"
              }),440
         else:
-            sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
-            db.execute(sql_command, [dane["czynnosc"], dane["opis_czynnosci"], dane["priorytet"], dane["data"], dane["godzina"]])
-            db.commit()
+            dbcursor = mydb.cursor()
+            sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(%s, %s, %s, %s, %s);"
+            dbcursor.execute(sql_command, [dane["czynnosc"], dane["opis_czynnosci"], dane["priorytet"], dane["data"], dane["godzina"]])
+            mydb.commit()
             return jsonify({
                 "success": True,
-                "info": "Transaction add successfuly"
+                "info": "Dane dodane poprawnie"
             }),201
 
+#funkcja sprawdzajaca czy w zadaniu jest poprawnie wpisana data
+def isDate(zmienna):
+    format = "%d-%m-%Y"
+    try:
+        res = bool(datetime.strptime(zmienna, format))
+        return True
+    except ValueError:
+        return False
+
+#funkcja sprawdzajaca czy w zadaniu jest poprawnie wpisana godzina
+def isTime(zmienna):
+    for fmt in ('%H:%M:%S.%f', '%H:%M:%S'):
+        try:
+            datetime.strptime(zmienna, fmt)
+            return True
+        except ValueError:
+            continue
+    return False
 
 # Json z metoda PUT, DELETE i GET z wyszukiwaniem przez id
 @app.route('/api/czynnosci/<int:id>', methods = ["GET","PUT","DELETE"])
 def get_czynnosci_id(id):
-    db = get_db()
-    sql_command = "select * from TODO where id = ?"
+    # db = get_db()
+    dbcursor = mydb.cursor(dictionary=True)
+    sql_command = "select * from TODO where id = %s"
     if request.method == "GET":
-        cursor = db.execute(sql_command, [id])
-        czynnosci = cursor.fetchone()
+        dbcursor.execute(sql_command, [id])
+        czynnosci = dbcursor.fetchone()
         todo_schema = TodoSchema(many=False)
         return jsonify({
             "success": True,
@@ -71,9 +92,9 @@ def get_czynnosci_id(id):
     else:
         if request.method == 'PUT':
             dane = request.json
-            cursor = db.execute(sql_command, [id])
+            dbcursor.execute(sql_command, [id])
             todo_schema = TodoSchema(many=False)
-            changed_dana = cursor.fetchone()
+            changed_dana = dbcursor.fetchone()
             changed_dana = todo_schema.dump(changed_dana)
             czynnosc = changed_dana['czynnosc']
             data = changed_dana['data']
@@ -91,21 +112,27 @@ def get_czynnosci_id(id):
                     opis_czynnosci = dane.get(x)
                 elif x == "priorytet":
                     priorytet = dane.get(x)
-            sql_command = "UPDATE TODO SET czynnosc = ?, data = ?, godzina = ?, opis_czynnosci = ?, priorytet = ? where id = ?;"
-            db.execute(sql_command, [czynnosc, data, godzina, opis_czynnosci, priorytet, id])
-            db.commit()
-            return jsonify(
-                {"success": True,
-                 "info": "Dane zmienione"}
-            ), 200
+            if priorytet == "medium" or priorytet == "low" or priorytet == "high":
+                sql_command = "UPDATE TODO SET czynnosc = %s, data = %s, godzina = %s, opis_czynnosci = %s, priorytet = %s where id = %s;"
+                dbcursor.execute(sql_command, [czynnosc, data, godzina, opis_czynnosci, priorytet, id])
+                mydb.commit()
+                return jsonify(
+                    {"success": True,
+                    "info": "Dane zmienione"}
+                ), 200
+            else:
+                return jsonify(
+                {"success": False,
+                 "info": "Dane wpisane niepoprawnie"}
+                ), 400
 
         if request.method == 'DELETE':
-            sql_command = "DELETE FROM TODO WHERE id=?;"
-            db.execute(sql_command,str(id))
-            db.commit()
+            sql_command = "DELETE FROM TODO WHERE id= %s;"
+            dbcursor.execute(sql_command, [id])
+            mydb.commit()
             return jsonify({
                 "success": True,
-                "info": "Delete zadzialal :)"
+                "info": "Dane usunięte"
             }),201
 
 
@@ -113,10 +140,10 @@ def get_czynnosci_id(id):
 # strona glowna
 @app.route('/add', methods = ["GET", "POST"])
 def add():
-    db = get_db()
+    dbcursor = mydb.cursor(dictionary=True)
     sql_command = "select * from TODO;"
-    cursor = db.execute(sql_command)
-    TODO = cursor.fetchall()
+    dbcursor.execute(sql_command)
+    TODO = dbcursor.fetchall()
 
     if request.method == "GET":
         return render_template("add.html", TODO = TODO)
@@ -128,24 +155,23 @@ def add():
         fGodzina  = request.form['fGodzina']
 
         if fCzynnosc != "" and fOpis != "" and fData != "" and fGodzina != "":
-            db = get_db()
-            sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(?,?,?,?,?);"
-            db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
-            db.commit()
-            return redirect(url_for('add'))
+            sql_command = "insert into TODO(czynnosc, opis_czynnosci, priorytet, data, godzina) values(%s, %s, %s, %s, %s);"
+            dbcursor.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina])
+            mydb.commit()
+            return redirect(url_for('index'))
         else:
             return redirect(url_for('add'))
 
 @app.route('/update/<int:id>', methods = ["GET", "POST"])
 def update(id):
-    db = get_db()
-    sql_command = "select * from TODO where id = ?"
-    cursor = db.execute(sql_command, [id])
-    TODO = cursor.fetchone()
+    dbcursor = mydb.cursor(dictionary=True)
+    sql_command = "select * from TODO where id = %s"
+    dbcursor.execute(sql_command, [id])
+    TODO = dbcursor.fetchone()
 
     if request.method == "GET":
         return render_template("update.html", TODO = TODO)
-    
+
     if request.method == "POST":
         fCzynnosc = request.form['fCzynnosc']
         fOpis = request.form['fOpis']
@@ -154,43 +180,33 @@ def update(id):
         fGodzina  = request.form['fGodzina']
 
         if fCzynnosc != "" and fOpis != "" and fData != "" and fGodzina != "":
-            sql_command = "update TODO set czynnosc = ?, opis_czynnosci = ?, priorytet = ?, data = ?, godzina = ? where id = ?;"
-            db.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina, id])
-            db.commit()
-            return render_template("show.html", TODO = TODO)
+            sql_command = "update TODO set czynnosc = %s, opis_czynnosci = %s, priorytet = %s, data = %s, godzina = %s where id = %s;"
+            dbcursor.execute(sql_command, [fCzynnosc, fOpis, fPriorytet, fData, fGodzina, id])
+            mydb.commit()
+            return redirect(url_for('index'))
         else:
             return render_template("update.html", TODO = TODO)
 
 
-# strona wyswietl
-@app.route('/wyswietl')
-def wyswietl():
-    db = get_db()
+# strona glowna
+@app.route('/')
+def index():
+    dbcursor = mydb.cursor(dictionary=True)
     sql_command = "select * from TODO;"
-    cursor = db.execute(sql_command)
-    TODO = cursor.fetchall()
+    dbcursor.execute(sql_command)
+    TODO = dbcursor.fetchall()
 
     return render_template("show.html", TODO = TODO)
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    db = get_db()
-    sql_command = "delete from TODO where id=?"
-    db.execute(sql_command, [id])
-    db.commit()
-    
-    db = get_db()
-    sql_command = "select * from TODO;"
-    cursor = db.execute(sql_command)
-    TODO = cursor.fetchall()
+    sql_command = "delete from TODO where id=%s"
+    dbcursor = mydb.cursor(dictionary=True)
+    dbcursor.execute(sql_command, [id])
+    mydb.commit()
 
-    return render_template("show.html", TODO = TODO)
+    return redirect(url_for('index'))
 
-
-# strona index
-@app.route('/')
-def index():
-    return render_template("index.html")
 
 
 # strona API

@@ -4,6 +4,183 @@
 
 {% block content %}
 
-<h1>inex</h1>
+    <!-- <table id ="listaZadan" class="table table-bordered">
+        <thead class="table-light header">
+            <tr>
+                <th>id</th>
+                <th>czynność</th>
+                <th>data</th>
+                <th>opis czynnosci</th>
+                <th>priorytet</th>
+                <th>godzina</th>
+                <th>funkcje</th>
+            </tr>
+        </thead>
 
+        <tbody id="TODOList">
+
+        </tbody>
+    </table> -->
+    <div class="row" id="TODOList"></div>
+
+
+<script>
+    TODOList = document.getElementById("TODOList");
+    const api_url = "{{url_for('get_czynnosci')}}";
+    let workDataArrTemp = [];
+    async function apiGetTODO() {
+    const response = await fetch(api_url);
+    const data = await response.json();
+    const workData = data.dane;
+    function sortByData(a, b){
+        tempA = Math.floor(new Date(a.data).getTime() / 1000);
+        tempB = Math.floor(new Date(b.data).getTime() / 1000);
+        return tempA - tempB;
+    }
+
+    function fetchData(){
+        let i = 1;
+        console.log(workData.sort(sortByData));
+        workData.forEach(elem =>{
+            console.log(elem);
+            let card = document.createElement("div");
+            TODOList.appendChild(card);
+            card.setAttribute("class", "col-md-4 col-sm-6 ps-4 pt-4");
+            let cardMain = document.createElement("div");
+            card.appendChild(cardMain);
+            cardMain.setAttribute("class", "card h-100");
+
+            let cardHead = document.createElement("div");
+            cardMain.appendChild(cardHead);
+            cardHead.setAttribute("class", "card-header");
+            cardHead.innerHTML = elem.czynnosc;
+
+            let cardBody = document.createElement("div");
+            cardMain.appendChild(cardBody);
+            cardBody.setAttribute("class", "card-body");
+            
+            let cardText = document.createElement("p");
+            cardBody.appendChild(cardText);
+            cardText.setAttribute("class", "card-text");
+            cardText.innerHTML = elem.opis_czynnosci;
+            
+            let cardUL = document.createElement("ul");
+            cardBody.appendChild(cardUL);
+            cardUL.setAttribute("class", "list-group list=group-flush postition-sticky ");
+
+            let cardLI1 = document.createElement("li");
+            cardUL.appendChild(cardLI1);
+            cardLI1.setAttribute("class", "list-group-item");
+            cardLI1.innerHTML = elem.priorytet;
+
+            let cardLI2 = document.createElement("li");
+            cardUL.appendChild(cardLI2);
+            cardLI2.setAttribute("class", "list-group-item");
+            cardLI2.innerHTML = elem.data;
+
+            let cardLI3 = document.createElement("li");
+            cardUL.appendChild(cardLI3);
+            cardLI3.setAttribute("class", "list-group-item");
+            cardLI3.innerHTML = elem.godzina;
+
+            let cardFooter = document.createElement("div");
+            cardMain.appendChild(cardFooter);
+            cardFooter.setAttribute("class", "card-footer text-center grid gap-3");
+
+            let buttonEdit = document.createElement("a");
+            buttonEdit.setAttribute("href", "update/"+elem.id+"")
+            buttonEdit.setAttribute("class", "btn btn-secondary mr-2")
+            buttonEdit.setAttribute("id", "btnUpdate"+i)
+            buttonEdit.innerHTML = "Edit";
+            cardFooter.appendChild(buttonEdit);
+
+            let buttonDelete = document.createElement("button");
+            buttonDelete.setAttribute("class", "btn btn-danger ml-2")
+            buttonDelete.setAttribute("type", "button")
+            buttonDelete.setAttribute("id", "btnDelete"+i)
+
+            buttonDelete.addEventListener("click", confirmDelete)
+            buttonDelete.innerHTML = "Delete"
+            cardFooter.appendChild(buttonDelete);
+            function confirmDelete(){
+                if(confirm("Czy na pewno chcesz usunąć?") == true){
+                    let link = window.location.href;
+                    window.location.replace(link+"/delete/"+elem.id)
+                }
+            }
+
+            // let TODOtbodyTr = document.createElement("tr")
+            // TODOList.appendChild(TODOtbodyTr);
+
+            // let TODOtbodyTd8 = document.createElement("td")
+            // let TODOtbodyTd8Text = document.createTextNode(i);
+            // TODOtbodyTd8.appendChild(TODOtbodyTd8Text);
+            // TODOtbodyTr.appendChild(TODOtbodyTd8);
+
+            // let TODOtbodyTd1 = document.createElement("td")
+            // let TODOtbodyTd1Text = document.createTextNode(elem.czynnosc);
+            // TODOtbodyTd1.appendChild(TODOtbodyTd1Text);
+            // TODOtbodyTr.appendChild(TODOtbodyTd1);
+
+            // let TODOtbodyTd2 = document.createElement("td")
+            // let TODOtbodyTd2Text = document.createTextNode(elem.data);
+            // TODOtbodyTd2.appendChild(TODOtbodyTd2Text);
+            // TODOtbodyTr.appendChild(TODOtbodyTd2);
+
+            // let TODOtbodyTd3 = document.createElement("td")
+            // let TODOtbodyTd3Text = document.createTextNode(elem.opis_czynnosci);
+            // TODOtbodyTd3.appendChild(TODOtbodyTd3Text);
+            // TODOtbodyTr.appendChild(TODOtbodyTd3);
+
+            // let TODOtbodyTd4 = document.createElement("td")
+            // let TODOtbodyTd4Text = document.createTextNode(elem.priorytet);
+            // TODOtbodyTd4.appendChild(TODOtbodyTd4Text);
+            // TODOtbodyTr.appendChild(TODOtbodyTd4);
+
+            // let TODOtbodyTd5 = document.createElement("td")
+            // let TODOtbodyTd5Text = document.createTextNode(elem.godzina);
+            // TODOtbodyTd5.appendChild(TODOtbodyTd5Text);
+            // TODOtbodyTr.appendChild(TODOtbodyTd5);
+
+
+            // let TODOtbodyTd6 = document.createElement("td")
+
+            // let TODOtbodyTd6A = document.createElement("a");
+            // TODOtbodyTd6A.setAttribute("href", "update/"+elem.id+"")
+            // TODOtbodyTd6A.setAttribute("class", "btn btn-secondary")
+            // TODOtbodyTd6A.setAttribute("id", "btnUpdate"+i)
+            // let TODOtbodyTd6Text = document.createTextNode("Z");
+            // TODOtbodyTd6A.appendChild(TODOtbodyTd6Text);
+            // TODOtbodyTd6.appendChild(TODOtbodyTd6A);
+
+            // TODOtbodyTr.appendChild(TODOtbodyTd6);
+
+            // let TODOtbodyTd7A = document.createElement("button");
+            // TODOtbodyTd7A.setAttribute("class", "btn btn-danger")
+            // TODOtbodyTd7A.setAttribute("id", "btnDelete"+i)
+
+            // TODOtbodyTd7A.addEventListener("click", confirmDelete)
+            // let TODOtbodyTd7Text = document.createTextNode("X");
+            // TODOtbodyTd7A.appendChild(TODOtbodyTd7Text);
+            // TODOtbodyTd6.appendChild(TODOtbodyTd7A);
+            // function confirmDelete(){
+            //     if(confirm("Czy na pewno chcesz usunąć?") == true){
+            //         let link = window.location.href;
+            //         window.location.replace(link+"/delete/"+elem.id)
+            //     }
+            // }
+
+            // TODOtbodyTr.appendChild(TODOtbodyTd6);
+            i++;
+            // TODOElem.innerHTML =elem.czynnosc +" "+ elem.data +" "+ elem.opis_czynnosci +" "+ elem.priorytet +" "+ elem.godzina;
+        });
+    }
+
+    fetchData();
+
+}
+window.onload = () => {
+    apiGetTODO();
+}
+</script>
 {% endblock %}
